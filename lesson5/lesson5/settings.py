@@ -64,9 +64,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'lesson5.pipelines.Lesson5Pipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'lesson5.pipelines.DuplicatePipeline': 300,
+    'lesson5.pipelines.PriceConvertPipeline': 350,
+    'lesson5.pipelines.MongoDBPipeline': 400,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +90,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Configure MongoDB
+MONGO_DB_URL = 'mongodb://localhost:27017/'
+MONGO_DB_NAME = 'scrapy_data'
