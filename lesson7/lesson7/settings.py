@@ -94,3 +94,10 @@ ITEM_PIPELINES = {
 # Configure MongoDB
 # MONGO_DB_URL = 'mongodb://localhost:27017/'
 # MONGO_DB_NAME = 'scrapy_data'
+
+# Configure Exporter
+FEED_URI = 'export_data/%(name)s.xls'
+FEED_FORMAT = 'excel'
+FEED_EXPORT_ENCODING = 'UTF-8'
+FEED_EXPORT_FIELDS = ['name', 'price']
+FEED_EXPORTERS = {'excel': 'lesson7.exporters.ExcelItemExporter'}
