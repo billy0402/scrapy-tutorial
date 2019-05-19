@@ -8,7 +8,11 @@
 import scrapy
 
 
-class Lesson8Item(scrapy.Item):
+class BookItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    price = scrapy.Field()
+    review_rating = scrapy.Field()
+    review_num = scrapy.Field()
+    upc = scrapy.Field()
+    stock = scrapy.Field()
