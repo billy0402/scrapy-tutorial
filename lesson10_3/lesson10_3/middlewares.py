@@ -6,6 +6,28 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.cookies import CookiesMiddleware
+
+import browsercookie
+
+
+class BrowserCookiesMiddleware(CookiesMiddleware):
+    def __init__(self, debug=False):
+        super().__init__(debug)
+        self.load_browser_cookies()
+
+    def load_browser_cookies(self):
+        # 載入 Chrome 瀏覽器中的 Cookies
+        jar = self.jars['chrome']
+        chrome_cookie_jar = browsercookie.chrome()
+        for cookie in chrome_cookie_jar:
+            jar.set_cookie(cookie)
+
+        # 載入 Firefox 瀏覽器中的 Cookies
+        jar = self.jars['firefox']
+        firefox_cookie_jar = browsercookie.firefox()
+        for cookie in firefox_cookie_jar:
+            jar.set_cookie(cookie)
 
 
 class Lesson103SpiderMiddleware(object):
