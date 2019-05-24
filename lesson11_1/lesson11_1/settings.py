@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'lesson11_1.spiders'
 #USER_AGENT = 'lesson11_1 (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -46,15 +46,19 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'lesson11_1.middlewares.Lesson111SpiderMiddleware': 543,
-#}
+# 用來支援 cache_args (可選)
+SPIDER_MIDDLEWARES = {
+   'scrapy_splash.SplashDeduplicateArgsMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'lesson11_1.middlewares.Lesson111DownloaderMiddleware': 543,
-#}
+# 開啟 Splash 的兩個下載中介軟體並調整 HttpCompressionMiddleware 的次序
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 700,
+    'scrapy_splash.SplashMiddleware': 750,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 800,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -88,3 +92,14 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Configure Exporter
+FEED_URI = 'export_data/%(name)s.csv'
+FEED_FORMAT = 'csv'
+FEED_EXPORT_FIELDS = ['quote', 'author']
+
+# Splash 伺服器地址
+SPLASH_URL = 'http://127.0.0.1:8050'
+
+# 設定去重篩檢程式
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
