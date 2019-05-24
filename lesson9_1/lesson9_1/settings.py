@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'lesson9_1.spiders'
 #USER_AGENT = 'lesson9_1 (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -64,9 +64,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'lesson9_1.pipelines.Lesson91Pipeline': 300,
-#}
+ITEM_PIPELINES = {
+   # 'scrapy.pipelines.files.FilesPipeline': 1,
+   'lesson9_1.pipelines.MyFilesPipeline': 1,
+}
+FILES_STORE = 'examples_src'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +90,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Configure Exporter
+FEED_URI = 'export_data/%(name)s.json'
+FEED_FORMAT = 'json'
