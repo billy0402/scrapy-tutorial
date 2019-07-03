@@ -52,9 +52,10 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'lesson13_2.middlewares.Lesson132DownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    # 置於 HttpProxyMiddleware(750) 之前
+    'lesson13_2.middlewares.RandomHttpProxyMiddleware': 745,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -88,3 +89,6 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Configure Proxy List
+HTTPPROXY_PROXY_LIST_FILE = '../lesson13_1/export_data/free_proxy_list.json'

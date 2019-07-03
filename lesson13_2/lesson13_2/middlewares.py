@@ -5,7 +5,48 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+from collections import defaultdict
+import json
+import random
+
 from scrapy import signals
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
+from scrapy.exceptions import NotConfigured
+
+
+class RandomHttpProxyMiddleware(HttpProxyMiddleware):
+    def __init__(self, auth_encoding='latin-1', proxy_list_file=None):
+        if not proxy_list_file:
+            raise NotConfigured
+
+        self.auth_encoding = auth_encoding
+        # 分別用兩個列表維護 HTTP 和 HTTPS 的代理，{'http': [...], 'https:': [...]}
+        self.proxies = defaultdict(list)
+
+        # 從 json 檔案中讀取代理伺服器資訊，填入 self.proxies
+        with open(proxy_list_file) as file:
+            proxy_list = json.loads(file.read())
+            for proxy in proxy_list:
+                scheme = proxy['proxy_scheme']
+                url = proxy['proxy']
+                self.proxies[scheme].append(self._get_proxy(url, scheme))
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # 從設定檔中讀取使用者驗證資訊的編碼
+        auth_encoding = crawler.settings.get('HTTPPROXY_AUTH_ENCODING', 'latin-1')
+
+        # 從設定檔中讀取代理伺服器清單檔案(json)的路徑
+        proxy_list_file = crawler.settings.get('HTTPPROXY_PROXY_LIST_FILE')
+
+        return cls(auth_encoding, proxy_list_file)
+
+    def _set_proxy(self, request, scheme):
+        # 隨機選擇一個代理
+        creds, proxy = random.choice(self.proxies[scheme])
+        request.meta['proxy'] = proxy
+        if creds:
+            request.headers['Proxy-Authorization'] = b'Basic' + creds
 
 
 class Lesson132SpiderMiddleware(object):
