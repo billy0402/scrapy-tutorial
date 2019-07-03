@@ -2,13 +2,17 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 
+from scrapy_redis.spiders import RedisSpider
+
 from ..items import BookItem
 
 
-class BooksSpider(scrapy.Spider):
+# 1. 更改基礎類別
+class BooksSpider(RedisSpider):
     name = 'books'
     allowed_domains = ['books.toscrape.com']
-    start_urls = ['http://books.toscrape.com/']
+    # 2. 註解 start_urls
+    # start_urls = ['http://books.toscrape.com/']
 
     # 書籍清單
     def parse(self, response):

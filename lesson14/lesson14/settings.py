@@ -66,6 +66,8 @@ ROBOTSTXT_OBEY = True
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'lesson14.pipelines.BookPipeline': 300,
+    # 啟用 scrapy_redis 的 RedisPipeline 將爬取到的資料整理到 Redis 資料庫
+    'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -88,3 +90,18 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 必選
+# 指定爬蟲所使用的 redis 資料庫(在雲端伺服器上)
+REDIS_URL = 'redis://192.168.157.132:6379'
+
+# 使用 scrapy_redis 的排程器替代 Scrapy 原版的排程器
+SCHEDULER = 'scrapy_redis.scheduler.Scheduler'
+
+# 使用 scrapy_redis 的 RFPDupeFilter 作為重篩檢程式
+DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'
+
+# 可選
+# 爬蟲停止後，保留/清裡 redis 中的請求佇列以及去重合
+# True = 保留，False = 清理(default)
+SCHEDULER_PERSIST = True
